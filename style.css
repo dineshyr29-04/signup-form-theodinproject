@@ -53,8 +53,10 @@
   color:#5c052f;
   
 }
-.input-container input:valid + input{
-    outline: 2px solid rgb(137, 93, 147);
+/* on focus → add outline */
+.input-container input:focus + input {
+    outline: 4px solid rgb(137, 93, 147);
+    
 
 }
 .fields *{
@@ -72,161 +74,43 @@ span{
 span:hover{
     color:#417d65;
 }
-
-@media(min-width:800px){
 .main{
     display: flex;
-    flex-direction:row;
-    
+    flex-direction:column;
     justify-content: center;
-    max-height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
 }
-    .images{
-    display: flex;
-    align-items: start;
-    justify-content: center;
-    opacity: .75;
-    width: 30%;
-    min-height:100vh;
-    background-size: cover;
-    background-image: url(halie-west-25xggax4bSA-unsplash.jpg);
-}
-    .odin h1{
-    color: #fff;
-    font-family: norse-bold, sans-serif;
-    font-size: 100px;
-    opacity: 1;
-}
-
-.odin img{
-    opacity: 1;
-    
-}
-
-.odin{
-    display: flex;
-    align-items: center;
-    margin-top: 10rem;
-    max-width: 100%;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.text{
-    background-color: #ddd;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-    gap: 0rem;
-    
-} 
-.tag-line{
-    font-size: 23px;
-    font-style: italic;
-    font-weight: light;
-    margin-left: 3rem;
-    margin-top: 1rem;
-    font-family:'Times New Roman', Times, serif;
-}
-.account{
-    padding: 1rem;
-    width: 12rem;
-    border: none;
-    border-radius:5px 0px 5px 5px;
-    background-color: #3d5c29;
-    color: #fff;
-    font-weight: light;
-    margin-top:10px;
-}
-@font-face {
-    font-family: norse-bold;
-    src: url(Norse-Bold.otf);
-}
-
-.odin h1{
-    color: #fff;
-    font-family: norse-bold, sans-serif;
-    font-size: 100px;
-    opacity: 1;
-}
-
-.odin img{
-    opacity: 1;
-    
-}
-
-.odin{
-    display: flex;
-    align-items: center;
-    margin-top: 10rem;
-    max-width: 100%;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.text{
-    background-color: #ddd;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-    gap: 0rem;
-}
-.fields{
-    display: flex;
-    
-    gap: 2px;
-    margin-left:-10px;
-}
-.addline{
-    font-size:20px;
-    font-family:Roboto;
-     margin-left: 45px;
-}
-button{
-    padding: 1rem;
-    width: 12rem;
-    border: none;
-    border-radius:5px 0px 5px 5px;
-    background-color: #3d5c29;
-    color: #fff;
-    font-weight: light;
-    margin-top: 1rem;
-    
-}
-.form{
-    background-color: #f8faf7;
-    width: 100%;
-    box-shadow: 3px 3px 10px #aaa;
-    padding-left: 2rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-}
-
-
-
-@media (max-width:480px){
+@media(min-width:800px){
     .main{
-        display:flex;
-        flex-direction:column;
+        flex-direction:row;
+    } 
+    .images{
+        width: 30%;
         min-height: 100vh;
-        justify-content: center;
+        height:auto;
     }
+    .text{
+        width: 70%;
+        min-height:100vh;
+    }
+
+}
+
+
+
+
+    
     
     .images{
-    
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: .75;
-    width: 100vw;
+    opacity: 0.75;
+    width: 100%;
     height:30vh;
     background-size: cover;
     background-image: url("halie-west-25xggax4bSA-unsplash.jpg");
-}
+   }
 .addline{
     font-size:20px;
     font-family:Roboto;
@@ -251,7 +135,7 @@ button{
 .odin{
     display: flex;
     align-items: center;
-    max-width: 100%;
+    min-width: 100%;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.5);
 }
@@ -263,13 +147,13 @@ button{
     min-height: 100vh;
     justify-content: center;
     gap: 0rem;
-    
+    width:100%;
 }
 .fields{
     display: flex;
     flex-direction:column;
     gap: 2px;
-    margin-left:-10px;
+    flex-wrap:wrap;
 }
 .tag-line{
     font-size: 20px;
@@ -299,7 +183,7 @@ button{
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
-} 
+
 
 
 
@@ -331,10 +215,4 @@ button{
 
 /* style for login page */
 
-.login-container{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:30px;
 
-}
