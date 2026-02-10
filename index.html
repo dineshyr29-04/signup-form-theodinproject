@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sign-up form</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="main">
@@ -17,12 +20,12 @@
             </div>
         </div>
         <div class="text">
-            <h2 class="tag-line">This is not a real online service! You know you need something like this in your life to help you realize your deepest dreams.<br>Sign up <em>now</em> to get started.</h2>
+            <h2 class="tag-line">This is not a real online service! You know you need something like this in your life to help you realize your deepest dreams.<br>Sign up now to get started.</h2>
             <br>
-            <strong><h2>You <em>know</em> you want to.</h2></strong>
+            <h2 class="addline">You know you want to.</h2>
             <br><br>
             <div class="form">
-                <h2>Let's do this!</h2><br>
+                <h2 >Let's do this!</h2><br>
                 <form action="#">
                     <div class="fields">
                         <div class="input-container">
@@ -45,8 +48,6 @@
                         <div class="input-container">
                             
                             <input type="password" id="password" minlength="8" maxlength="25" required>
-                            
-                            
                             <label for="">PASSWORD</label><br>
                         </div>
                     </div>
@@ -54,7 +55,7 @@
                 </form>
             </div>
             <div>
-                <button style="font-size:16px;" onclick=login()>Create Account</button>
+                <button style="font-size:16px;" onclick=login() class="account">Create Account</button>
             </div>
             <br>
             <strong><p>Already have an account? <span onclick="window.location.href='log-inpage.html'">Log in</span></p></strong>

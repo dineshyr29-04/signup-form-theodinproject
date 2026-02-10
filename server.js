@@ -23,7 +23,7 @@ const server=http.createServer((req,res)=>{
         const {name,email,password}= JSON.parse(body);
      })
      const users=getusers();
-     const exist=users.find(user => user.email ===email);
+     const exist=users.find(user => user.email === email);
      if (exist) {
       req.end=("Users already exists");
       return;
@@ -43,7 +43,7 @@ const server=http.createServer((req,res)=>{
     } else if (!users) {
       res.end("Invalid email");
     } else {
-      res.end("invalid password");
+      res.end("Invalid password");
     }
     
   }
