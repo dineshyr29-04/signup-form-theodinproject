@@ -29,4 +29,13 @@ function login() {
         headers :{"Content-Type" : "application/json"},
         body: JSON.stringify({email,password})
     })
+    .then(response => response.text())
+    .then(result => {
+        if(result === "LOGIN_SUCCESS"){
+            alert("Login successful!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert(result);
+        }
+});
 }
