@@ -22,8 +22,27 @@ fetch("http://localhost:3000/users", {
 }
 
 function login() {
+
     const email=document.getElementById("email").value;
     const password= document.getElementById("password").value;
+    const error=document.getElementsByClassName("errormsg");
+    error[0].style.display="none";
+    error[1].style.display="none";
+    if (email === "" && password === "") {
+        error[0].style.display="block";
+        error[1].style.display="block";
+        
+    } else if (email === "") {
+        error[0].style.display="block";
+        error[1].style.display="none";
+        
+    } else if  (password === ""){
+        error[0].style.display="none";
+        error[1].style.display="block";
+        
+    } else{
+        error[0].style.display="none";
+        error[1].style.display="none";
     fetch("http://localhost:3000/login",{
         method: "POST",
         headers :{"Content-Type" : "application/json"},
@@ -32,10 +51,24 @@ function login() {
     .then(response => response.text())
     .then(result => {
         if(result === "LOGIN_SUCCESS"){
-            alert("Login successful!");
+            
             window.location.href = "dashboard.html";
         } else {
-            alert(result);
+            error[1].textContent="Invalid password for the given email";
+            error[1].style.display="block";
         }
 });
+}
+}
+document.getElementById("logpage").addEventListener("click", function() {
+    this.getElementsByClassName("emailin")[0].value="";
+    this.getElementsByClassName("passwordlogin")[0].value="";
+});
+
+function forgotpassword() {
+    window.location.href = "forgotpass.html";
+    const email=document.getElementById("email").value;
+    fetch("http://localhost:3000/forgot-password",{
+
+})
 }
