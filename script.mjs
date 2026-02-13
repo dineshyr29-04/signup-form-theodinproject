@@ -85,7 +85,7 @@ function forgotpassword() {
     const loginbtn2=document.getElementsByClassName('loginbtn2');
 
 
-    if (email.value.includes('@gmail.com') || email.value.includes('@yahoo.com')){
+    if (email.value.includes('@') || email.value.includes('.')){
         resetbtn.style.display='none';
         emailcont[0].style.display='none';
         passwordcont[0].style.display='block';
@@ -98,19 +98,32 @@ function forgotpassword() {
     }
 }
 
-document.getElementById('donebtn').addEventListener("click",function(){
-     const newpass=document.getElementById('password');
-    const conpass=document.getElementById('confirmpasswaord');
+function samepassword(){
+    const newpass=document.getElementById('password');
+    const conpass=document.getElementById('confirmpassword');
     const errmsg=document.getElementById("errmsg2");
+    const errmsg3=document.getElementById('errmsg3');
+    const loginbtn2=document.getElementsByClassName('loginbtn2');
     
-    if (newpass.value===conpass.value){
-        window.location.href='login.html';
-        errmsg.style.display="none";
-        
-    } else {
+
+    errmsg.style.display="none";
+    errmsg3.style.display="none";
+
+    if ((newpass.value.length<8 )|| (conpass.value.length<8)){
+        errmsg3.style.display="block";
+        return;
+    } 
+    if (newpass.value!=conpass.value) {
         errmsg.style.display="block";
+    
+    } else {
+        loginbtn2[0].textContent="Resetting...";
+        loginbtn2[0].diabled=true;
+        setTimeout(() =>{
+            window.location.href='login.html';
+        },2000);
     }
-})
+}
    
 
 

@@ -254,6 +254,48 @@ img{
     box-shadow: 4px 4px 4px 2px rgba(59, 61, 61, 0.2);
     height:auto;
     width:auto;
+
+    /* glassmorphism*/
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+   
+    /*neon edges*/
+    animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{
+    0%{
+        box-shadow:0 0 12px rgba(104, 199, 199, 0.6),
+    0 0 32px rgba(144, 159, 159, 0.35);
+    } 50%{
+        box-shadow:0 0 12px rgba(135, 218, 218, 0.6),
+    0 0 32px rgba(144, 159, 159, 0.35);
+    } 75% {
+        box-shadow:0 0 12px rgba(67, 210, 210, 0.6),
+    0 0 32px rgba(59, 119, 119, 0.35);
+    } 100%{
+        box-shadow:0 0 12px rgba(135, 218, 218, 0.6),
+    0 0 32px rgba(144, 159, 159, 0.35);
+    }
+}
+
+.login-container:hover{
+    animation:shake 0.5s easse-in-out;
+    
+}
+@keyframes shake{
+    0%{
+        translateX:0px;
+        
+    } 25%{
+        translateX:5px;
+    } 50%{
+        translateX:5px;
+    } 75%{
+        translateX:5px;
+    } 100%{
+        translateX:0px;
+    }
 }
 .headcontainer{
     display:flex;
@@ -467,7 +509,7 @@ input[type=checkbox]{
     font-size:14px;
     margin-left:18px;
     display:none;
-    color:#dd8b97;
+    color:#f75e75;
 }
  
 .emailcontainer{
@@ -480,11 +522,17 @@ input[type=checkbox]{
     font-size:14px;
     margin-left:-85px;
     display:none;
-    color:#dd8b97;
+    color:#b03144;
 }
 .loginbtn1{
     display:block;
 }
-.loginbtn2{
+.loginbtn2{     
     display:none;
+}
+.errmsg3{
+    font-size:14px;
+    margin-left:18px;
+    display:none;
+    color:#f75e75;
 }

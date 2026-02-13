@@ -1,9 +1,9 @@
 
+import http from "http"
+import fs from "fs"
 
-const http = require("http");
-const fs = require("fs");
 
-const PORT = 3000;
+const PORT =process.env.port || 3000;
 
 // create database if not exists
 if (!fs.existsSync("users.json")) {
