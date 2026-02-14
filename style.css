@@ -220,7 +220,7 @@ span:hover{
 /* style for login page */
 
 .backgroundImage{
-    background: #201e1e;
+    background: #01010b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,25 +256,25 @@ img{
     width:auto;
 
     /* glassmorphism*/
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(62, 61, 61, 0.644);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
    
     /*neon edges*/
-    animation:blink 2s ease-in-out infinite;
+    animation:blink 2s ease infinite;
 }
 @keyframes blink{
     0%{
-        box-shadow:0 0 12px rgba(104, 199, 199, 0.6),
+        box-shadow:0 0 20px rgba(104, 199, 199, 0.6),
     0 0 32px rgba(144, 159, 159, 0.35);
     } 50%{
-        box-shadow:0 0 12px rgba(135, 218, 218, 0.6),
+        box-shadow:0 0 15px rgba(135, 218, 218, 0.6),
     0 0 32px rgba(144, 159, 159, 0.35);
     } 75% {
-        box-shadow:0 0 12px rgba(67, 210, 210, 0.6),
+        box-shadow:0 0 18px rgba(67, 210, 210, 0.6),
     0 0 32px rgba(59, 119, 119, 0.35);
     } 100%{
-        box-shadow:0 0 12px rgba(135, 218, 218, 0.6),
+        box-shadow:0 0 25px rgba(135, 218, 218, 0.6),
     0 0 32px rgba(144, 159, 159, 0.35);
     }
 }
@@ -431,6 +431,29 @@ input[type=checkbox]{
     margin-left:18px;
     color:#dd8b97;
  }
+ .login-container:hover{
+    animation:shake 1.2s ease;
+    box-shadow:0px 0px 22px #1c52a9 ,
+    0px 0px 22px #124578;
+ }
+
+ @keyframes shake{
+    0%{
+        transform:translateX(0);
+
+    } 
+    25%{
+        transform:translateX(5px) rotate(2deg);
+    }50%{
+        transform:translateX(-5px) rotate(-2deg);
+    }75%{
+        transform:translateX(5px) rotate(2deg);
+    }
+    100%{
+        transform:translateX(0);
+    }
+ 
+}
 
 
 
