@@ -98,7 +98,7 @@ function resetpassword() {
     })
     .then(response=> response.text())
     .then(result=>{
-        if (result==="Email Found"){
+        if (result==="Email Not Found"){
             resetbtn.style.display = 'none';
             emailcont[0].style.display = 'none';
             passwordcont[0].style.display = 'block';
