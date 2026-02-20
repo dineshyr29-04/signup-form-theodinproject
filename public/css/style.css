@@ -83,7 +83,7 @@ span:hover{
     min-height: 100vh;
 }
 
-    .images{
+.images{    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,7 +91,7 @@ span:hover{
     width: 100%;
     height:30vh;
     background-size: cover;
-    background-image: url("halie-west-25xggax4bSA-unsplash.jpg");
+    background-image: url("../images/halie-west-25xggax4bSA-unsplash.jpg");                                                             
    }
 .addline{
     font-size:20px;

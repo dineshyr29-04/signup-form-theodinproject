@@ -52,7 +52,7 @@ function login() {
             .then(result => {
                 if (result === "LOGIN_SUCCESS") {
 
-                    window.location.href = "dashboard.html";
+                    window.location.href = "../html/dashboard.html";
                 } else {
                     error[1].textContent = "Invalid password for the given email";
                     error[1].style.display = "block";

@@ -102,6 +102,10 @@ res.setHeader("Access-Control-Allow-Origin", "*");
   }
 });
 
+if (req.metod==='POST'&& req.url==="/setpassword"){
+  
+}
+
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
