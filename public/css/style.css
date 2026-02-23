@@ -100,7 +100,7 @@ span:hover{
 }
 @font-face {
     font-family: norse-bold;
-    src: url(Norse-Bold.otf);
+    src: url(../../Norse-Bold.otf) format("opentype");
 }
 
 .odin h1{
@@ -377,7 +377,7 @@ button{
     50%{
         box-shadow:0 0 15px rgba(20, 170, 235, 0.6),
                    0 0 32px rgba(144, 159, 159, 0.35);
-    }
+    }                                                                                                                           
     75%{
         box-shadow:0 0 18px rgba(99, 160, 230, 0.6),
                    0 0 32px rgba(59, 119, 119, 0.35);
@@ -388,9 +388,7 @@ button{
     }
 }
 
-/* ===============================
-   ANIMATION STATES (SIMULTANEOUS)
-   =============================== */
+/* ANIMATION STATES (SIMULTANEOUS)*/
 
 /* Default State */
 .login-container{

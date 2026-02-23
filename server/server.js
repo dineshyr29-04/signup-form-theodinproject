@@ -1,19 +1,28 @@
 import express from "express";
-import fs from "fs";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+/* ---------------- PATH SETUP ---------------- */
+
+// Needed for __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_PATH = path.join(__dirname, "users.json");
+
 /* ---------------- MIDDLEWARE ---------------- */
 
-// Built-in body parser
+// Parse JSON body
 app.use(express.json());
 
-// CORS headers
+// Basic CORS middleware
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
@@ -24,71 +33,113 @@ app.use((req, res, next) => {
 
 /* ---------------- DATABASE FUNCTIONS ---------------- */
 
-if (!fs.existsSync("users.json")) {
-  fs.writeFileSync("users.json", "[]");
+async function initializeDB() {
+  try {
+    await fs.access(DB_PATH);
+  } catch {
+    await fs.writeFile(DB_PATH, "[]");
+  }
 }
 
-function getUsers() {
-  return JSON.parse(fs.readFileSync("users.json"));
+async function getUsers() {
+  const data = await fs.readFile(DB_PATH, "utf-8");
+  return JSON.parse(data);
 }
 
-function saveUsers(users) {
-  fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+async function saveUsers(users) {
+  await fs.writeFile(DB_PATH, JSON.stringify(users, null, 2));
 }
 
 /* ---------------- ROUTES ---------------- */
 
+// Health check (important for deployment platforms)
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "Server running",
+  });
+});
+
 // REGISTER
-app.post("/users", (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
+app.post("/users", async (req, res) => {
+  try {
+    const { firstname, lastname, email, password } = req.body;
 
-  const users = getUsers();
-  const exists = users.find(u => u.email === email);
-    console.log("register end came....")
-  if (exists) {
-    return res.status(400).send("User already exists");
+    if (!firstname || !lastname || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const users = await getUsers();
+    const exists = users.find(u => u.email === email);
+
+    if (exists) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const newUser = {
+      id: Date.now(),
+      firstname,
+      lastname,
+      email,
+      password,
+      createdAt: new Date()
+    };
+
+    users.push(newUser);
+    await saveUsers(users);
+
+    res.status(201).json({ message: "Registered Successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
   }
-
-  users.push({ firstname, lastname, email, password });
-  saveUsers(users);
-
-  res.status(201).send("Registered Successfully");
 });
 
 // LOGIN
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-    console.log("login end came....")
-  const users = getUsers();
-  const user = users.find(u => u.email === email);
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  if (!user) {
-    return res.status(404).send("Invalid email");
+    const users = await getUsers();
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid email" });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    res.status(200).json({ message: "LOGIN_SUCCESS" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
   }
-
-  if (user.password !== password) {
-    return res.status(401).send("Invalid password");
-  }
-
-  res.status(200).send("LOGIN_SUCCESS");
 });
 
 // FORGOT PASSWORD
-app.post("/forgotpass", (req, res) => {
-  const { email } = req.body;
+app.post("/forgotpass", async (req, res) => {
+  try {
+    const { email } = req.body;
 
-  const users = getUsers();
-  const user = users.find(u => u.email === email);
+    const users = await getUsers();
+    const user = users.find(u => u.email === email);
 
-  if (!user) {
-    return res.status(404).send("Email Not Found");
+    if (!user) {
+      return res.status(404).json({ message: "Email Not Found" });
+    }
+
+    res.status(200).json({ message: "Email Found" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
   }
-
-  res.status(200).send("Email Found");
 });
 
-/* ---------------- SERVER ---------------- */
+/* ---------------- SERVER START ---------------- */
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+initializeDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });

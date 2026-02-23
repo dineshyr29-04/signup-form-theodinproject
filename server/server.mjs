@@ -10,6 +10,7 @@ if (!fs.existsSync("users.json")) {
   fs.writeFileSync("users.json", "[]");
 }
 
+
 function getUsers() {
   return JSON.parse(fs.readFileSync("users.json"));
 }
@@ -102,9 +103,7 @@ res.setHeader("Access-Control-Allow-Origin", "*");
   }
 });
 
-if (req.metod==='POST'&& req.url==="/setpassword"){
-  
-}
+
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
