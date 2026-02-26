@@ -16,8 +16,8 @@ function registeruser() {
             password: password
         })
     })
-        .then(response => response.text())
-        .then(result => alert(result));
+        .then(response => response.json())
+        .then(result => alert(result.message));
 
 }
 
@@ -46,21 +46,25 @@ function login() {
         fetch("http://localhost:3000/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email:email, password:password })
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(result => {
                 if (result === "LOGIN_SUCCESS") {
 
                     window.location.href = "../html/dashboard.html";
                 } else {
-                    error[1].textContent = "Invalid password for the given email";
+                    setTimeout(()=>{
+                        error[1].textContent = "Invalid password for the given email";
                     error[1].style.display = "block";
+                    },1000);
+                    
                 }
-            });
+            })
+            .catch(error=>console.log("Error:",error));
     }
 }
-document.getElementById("logpage").addEventListener("click", function () {
+document.getElementById("loginpage").addEventListener("click", function () {
     this.getElementsByClassName("emailin")[0].value = "";
     this.getElementsByClassName("passwordlogin")[0].value = "";
 });
@@ -83,7 +87,7 @@ function forgotPassword() {
 
 
 function resetpassword() {
-    const email = document.getElementById('forgotEmail');
+    const email = document.getElementById('forgotEmail').value;
     const emailcont = document.getElementsByClassName('emailcontainer');
     const passwordcont = document.getElementsByClassName('passwordcontainer');
     const resetbtn = document.getElementById('resetbtn');
@@ -94,11 +98,13 @@ function resetpassword() {
     fetch("http://localhost:3000/forgotpass", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.value })
+        body: JSON.stringify({ email })
     })
-    .then(response=> response.text())
+    .then(response=> response.json())
     .then(result=>{
         if (result==="Email Not Found"){
+            errmsg.style.display="block";
+        } else {
             resetbtn.style.display = 'none';
             emailcont[0].style.display = 'none';
             passwordcont[0].style.display = 'block';
@@ -106,8 +112,6 @@ function resetpassword() {
             errormsg2.style.display = "none";
             loginbtn1[0].style.display = "none";
             loginbtn2[0].style.display = "block";
-        } else {
-            errormsg.style.display = "block";
         }
     });
     }
@@ -121,7 +125,7 @@ function samepassword() {
     const loginbtn2 = document.getElementsByClassName('loginbtn2');
     const loginbox = document.querySelector(".login-container");
     const frogotbox = document.querySelector(".forgot-container");
-
+    const email=document.getElementById("forgotemail");
     errmsg.style.display = "none";
     errmsg3.style.display = "none";
 
@@ -134,13 +138,29 @@ function samepassword() {
 
     } else {
         loginbtn2[0].textContent = "Resetting...";
-        loginbtn2[0].disabled = true;
-        setTimeout(() => {
-            loginbox.classList.remove("hide");
-            frogotbox.classList.remove("show");
-        }, 2000);
+        fetch ("http://localhost:3000/setpassword",{
+            method: "POST",
+            headers: "application: JSON",
+            body:{email,newpass}
+        })
+        .then (response=>response.text())
+        .then(result=>{
+            if(result==="Password Changed"){
+                setTimeout(()=>{
+                    loginbox.classList.remove("hide");
+                    frogotbox.classList.remove("show");
+                },2000);
+            } else if (result==="Password is same"){
+                errmsg.textContent="Password is same";
+
+            } else if (result==="Something issue in password change"){
+                errmsg.textContent("Something issue in password change");
+            }
+        })
+        
     }
 }
+
 
 
 

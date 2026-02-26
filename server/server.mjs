@@ -3,7 +3,7 @@ import http from "http"
 import fs from "fs"
 
 
-const PORT =process.env.port || 3000;
+const PORT = process.env.port || 3000;
 
 // create database if not exists
 if (!fs.existsSync("users.json")) {
@@ -20,7 +20,7 @@ function saveUsers(users) {
 }
 
 const server = http.createServer((req, res) => {
-res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -48,13 +48,13 @@ res.setHeader("Access-Control-Allow-Origin", "*");
 
       users.push({ firstname, lastname, email, password });
       saveUsers(users);
-      
+
       console.log("User saved:", users);
       console.log("Saving users to file...");
-      setTimeout(()=>{
+      setTimeout(() => {
         res.end("saving profile....");
 
-      },2000);
+      }, 2000);
       res.end("Registered Successfully");
     });
     return;
@@ -83,27 +83,44 @@ res.setHeader("Access-Control-Allow-Origin", "*");
     return;
   }
 
-  if (req.method==="POST" && req.url==="/forgotpass"){
+  if (req.method === "POST" && req.url === "/forgotpass") {
     console.log("email check came")
-     let body="";
-     req.on("data",chunk => body+=chunk)
-     req.on("end",()=>{
-      const {email} =JSON.parse(body)
-      const users=getUsers();
-      const user=users.find(u=>u.email===email);
-      if (!user){
+    let body = "";
+    req.on("data", chunk => body += chunk)
+    req.on("end", () => {
+      const { email } = JSON.parse(body)
+      const users = getUsers();
+      const user = users.find(u => u.email === email);
+      if (!user) {
         res.end("Email Not Found")
-      
+
       } else {
         res.end("Email Found");
       }
 
-     });
-     return;
+    });
+    return;
   }
 });
 
+if (req.method === "POST" && req.url === "/setpassword") {
+  let body = "";
+  req.on("data", chunk => body)
+  req.on("end", ()=>{
+    const {email,password,confirmpassword}=JSON.parse(body);
+    const users=getUsers();
+    const user=users.find(u=>u.email===email)
+    if(user){
+      users.password=confirmpassword;
+      res.end("Password Changed")
+    } else if (user.password===password){
+      res.end("Password is same")
+    } else {
+      res.end("Something issue in password change")
+    }
 
+  })
+}
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

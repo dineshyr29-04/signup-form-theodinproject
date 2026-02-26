@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 /* ---------------- PATH SETUP ---------------- */
 
 // Needed for __dirname in ES modules
@@ -98,7 +99,7 @@ app.post("/users", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log("login form came")
     const users = await getUsers();
     const user = users.find(u => u.email === email);
 
@@ -135,6 +136,23 @@ app.post("/forgotpass", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
+
+app.post("/setpasswaord",async (req,res)=>{
+  try{
+    const {email,password}=req.body;
+    const users=await getUsers();
+    const user=users.find(u=>u.email===email);
+    if(!user){
+      return res.status(404).json({message:"Email is not Found"});
+    } else if(user.passward===password){
+      return res.status(200).json({message:"Password Changed"});
+    }else {
+      return res.status(404).json({message:"Password not found"});
+    }
+  } catch (error){
+    res.status(500).json({messzage:"Server error"});
+  }
+})
 
 /* ---------------- SERVER START ---------------- */
 
