@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import cors from "cors";
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -112,8 +113,9 @@ app.post("/login", async (req, res) => {
     }
 
     // Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const passVerification = await bcrypt.compare(password, user.password);
+    console.log("Passverification:",passVerification);
+    if (!passVerification) {
       return res.status(401).json({ message: "Invalid password" });
     }
 

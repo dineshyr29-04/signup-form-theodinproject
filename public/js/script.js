@@ -44,7 +44,7 @@ function login() {
     } else {
         error[0].style.display = "none";
         error[1].style.display = "none";
-        fetch("https://localhost:5000/login", {
+        fetch("http://localhost:5000/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, password: password })
@@ -54,12 +54,14 @@ function login() {
                 if (result.message === "LOGIN_SUCCESS") {
 
                     window.location.href = "/html/dashboard.html";
-                } else {
+                } else if (result.message="Invalid password"){
                     setTimeout(() => {
                         error[1].textContent = "Invalid password for the given email";
                         error[1].style.display = "block";
-                    }, 1000);
+                    }, 500);
 
+                } else {
+                    error[1].textContent="Server Error It's Not on You"
                 }
             })
             .catch(error => console.log("Error:", error));
@@ -93,7 +95,7 @@ function resetpassword() {
     const errormsg2 = document.getElementById('errmsg2');
     const loginbtn1 = document.getElementsByClassName('loginbtn1');
     const loginbtn2 = document.getElementsByClassName('loginbtn2');
-    fetch("https://localhost:5000/forgotpass", {
+    fetch("http://localhost:5000/forgotpass", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
@@ -136,7 +138,7 @@ function samepassword() {
 
     } else {
         loginbtn2[0].textContent = "Resetting...";
-        fetch("https://localhost:5000/setpassword", {
+        fetch("http ://localhost:5000/setpassword", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password: newpass.value })
