@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
-
+import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -15,7 +15,8 @@ const __dirname = path.dirname(__filename);
 const DB_PATH = path.join(__dirname, "..", "users.json");
 
 /* ---------------- MIDDLEWARE ---------------- */
-
+//parsing cors
+app.use(cors());
 // Parse JSON body
 app.use(express.json());
 
