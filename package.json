@@ -5,8 +5,8 @@
     "description": "A simple login system built with HTML, CSS, and JavaScript.",
     "main": "index.html",
     "scripts": {
-        "start": "node server/server.mjs",
-        "dev": "nodemon  server/server.js"
+        "start": "node server/server.js",
+        "dev": "nodemon server/server.js"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",

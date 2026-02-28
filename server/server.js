@@ -2,34 +2,37 @@ import express from "express";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import bcrypt from "bcrypt";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 5000;
 
 /* ---------------- PATH SETUP ---------------- */
 
 // Needed for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_PATH = path.join(__dirname, "users.json");
+const DB_PATH = path.join(__dirname, "..", "users.json");
 
 /* ---------------- MIDDLEWARE ---------------- */
 
 // Parse JSON body
 app.use(express.json());
 
-// Basic CORS middleware
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname, "..")));
+
+// Request Logger (Focused on POST as requested)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+  if (req.method === "POST") {
+    console.log(`[${new Date().toLocaleTimeString()}] POST request received: ${req.url}`);
   }
-
   next();
+});
+
+// Default route to serve login page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "login.html"));
 });
 
 /* ---------------- DATABASE FUNCTIONS ---------------- */
@@ -53,15 +56,11 @@ async function saveUsers(users) {
 
 /* ---------------- ROUTES ---------------- */
 
-// Health check (important for deployment platforms)
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "Server running",
-  });
-});
+// Removed health check because static files are now served from /
 
 // REGISTER
 app.post("/users", async (req, res) => {
+  console.log("  -> Processing Registration request");
   try {
     const { firstname, lastname, email, password } = req.body;
 
@@ -76,12 +75,16 @@ app.post("/users", async (req, res) => {
       return res.status(409).json({ message: "User already exists" });
     }
 
+    // Hash the password before saving
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = {
       id: Date.now(),
       firstname,
       lastname,
       email,
-      password,
+      password: hashedPassword,
       createdAt: new Date()
     };
 
@@ -97,9 +100,9 @@ app.post("/users", async (req, res) => {
 
 // LOGIN
 app.post("/login", async (req, res) => {
+  console.log(`[${new Date().toLocaleTimeString()}] Processing Login request`);
   try {
     const { email, password } = req.body;
-    console.log("login form came")
     const users = await getUsers();
     const user = users.find(u => u.email === email);
 
@@ -107,7 +110,9 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ message: "Invalid email" });
     }
 
-    if (user.password !== password) {
+    // Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
@@ -120,9 +125,9 @@ app.post("/login", async (req, res) => {
 
 // FORGOT PASSWORD
 app.post("/forgotpass", async (req, res) => {
+  console.log(`[${new Date().toLocaleTimeString()}] Processing Forgot Password request`);
   try {
     const { email } = req.body;
-
     const users = await getUsers();
     const user = users.find(u => u.email === email);
 
@@ -137,23 +142,34 @@ app.post("/forgotpass", async (req, res) => {
   }
 });
 
-app.post("/setpasswaord",async (req,res)=>{
-  try{
-    const {email,password}=req.body;
-    const users=await getUsers();
-    const user=users.find(u=>u.email===email);
-    if(!user){
-      return res.status(404).json({message:"Email is not Found"});
-    } else if(user.passward===password){
-      return res.status(200).json({message:"Password Changed"});
-    }else {
-      return res.status(404).json({message:"Password not found"});
-    }
-  } catch (error){
-    res.status(500).json({messzage:"Server error"});
-  }
-})
+app.post("/setpassword", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const users = await getUsers();
 
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      return res.status(404).json({ message: "Email Not Found" });
+    }
+
+    // Check if new password is same as old password
+    const isSame = await bcrypt.compare(password, user.password);
+    if (isSame) {
+      return res.status(400).json({ message: "Password is same" });
+    }
+
+    const saltRounds = 10;
+    user.password = await bcrypt.hash(password, saltRounds);
+
+    await saveUsers(users);
+
+    return res.status(200).json({ message: "Password Changed" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 /* ---------------- SERVER START ---------------- */
 
 initializeDB().then(() => {

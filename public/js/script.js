@@ -4,7 +4,7 @@ function registeruser() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     console.log("register button clicked");
-    fetch("http://localhost:3000/users", {
+    fetch("http://localhost:5000/users", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -17,7 +17,8 @@ function registeruser() {
         })
     })
         .then(response => response.json())
-        .then(result => alert(result.message));
+        .then(result => alert(result.message))
+        .catch(err=> console.log(err));
 
 }
 
@@ -43,31 +44,28 @@ function login() {
     } else {
         error[0].style.display = "none";
         error[1].style.display = "none";
-        fetch("http://localhost:3000/login", {
+        fetch("https://localhost:5000/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email:email, password:password })
+            body: JSON.stringify({ email: email, password: password })
         })
             .then(response => response.json())
             .then(result => {
-                if (result === "LOGIN_SUCCESS") {
+                if (result.message === "LOGIN_SUCCESS") {
 
-                    window.location.href = "../html/dashboard.html";
+                    window.location.href = "/html/dashboard.html";
                 } else {
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         error[1].textContent = "Invalid password for the given email";
-                    error[1].style.display = "block";
-                    },1000);
-                    
+                        error[1].style.display = "block";
+                    }, 1000);
+
                 }
             })
-            .catch(error=>console.log("Error:",error));
+            .catch(error => console.log("Error:", error));
     }
 }
-document.getElementById("loginpage").addEventListener("click", function () {
-    this.getElementsByClassName("emailin")[0].value = "";
-    this.getElementsByClassName("passwordlogin")[0].value = "";
-});
+
 
 function forgotPassword() {
     const loginbox = document.querySelector(".login-container");
@@ -95,26 +93,26 @@ function resetpassword() {
     const errormsg2 = document.getElementById('errmsg2');
     const loginbtn1 = document.getElementsByClassName('loginbtn1');
     const loginbtn2 = document.getElementsByClassName('loginbtn2');
-    fetch("http://localhost:3000/forgotpass", {
+    fetch("https://localhost:5000/forgotpass", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
     })
-    .then(response=> response.json())
-    .then(result=>{
-        if (result==="Email Not Found"){
-            errmsg.style.display="block";
-        } else {
-            resetbtn.style.display = 'none';
-            emailcont[0].style.display = 'none';
-            passwordcont[0].style.display = 'block';
-            errormsg.style.display = "none";
-            errormsg2.style.display = "none";
-            loginbtn1[0].style.display = "none";
-            loginbtn2[0].style.display = "block";
-        }
-    });
-    }
+        .then(response => response.json())
+        .then(result => {
+            if (result.message === "Email Not Found") {
+                errormsg.style.display = "block";
+            } else {
+                resetbtn.style.display = 'none';
+                emailcont[0].style.display = 'none';
+                passwordcont[0].style.display = 'block';
+                errormsg.style.display = "none";
+                errormsg2.style.display = "none";
+                loginbtn1[0].style.display = "none";
+                loginbtn2[0].style.display = "block";
+            }
+        });
+}
 
 
 function samepassword() {
@@ -125,7 +123,7 @@ function samepassword() {
     const loginbtn2 = document.getElementsByClassName('loginbtn2');
     const loginbox = document.querySelector(".login-container");
     const frogotbox = document.querySelector(".forgot-container");
-    const email=document.getElementById("forgotemail");
+    const email = document.getElementById("forgotEmail").value;
     errmsg.style.display = "none";
     errmsg3.style.display = "none";
 
@@ -138,26 +136,28 @@ function samepassword() {
 
     } else {
         loginbtn2[0].textContent = "Resetting...";
-        fetch ("http://localhost:3000/setpassword",{
+        fetch("https://localhost:5000/setpassword", {
             method: "POST",
-            headers: "application: JSON",
-            body:{email,newpass}
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password: newpass.value })
         })
-        .then (response=>response.text())
-        .then(result=>{
-            if(result==="Password Changed"){
-                setTimeout(()=>{
-                    loginbox.classList.remove("hide");
-                    frogotbox.classList.remove("show");
-                },2000);
-            } else if (result==="Password is same"){
-                errmsg.textContent="Password is same";
+            .then(response => response.json())
+            .then(result => {
+                if (result.message === "Password Changed") {
+                    setTimeout(() => {
+                        loginbox.classList.remove("hide");
+                        frogotbox.classList.remove("show");
+                    }, 2000);
+                } else if (result.message === "Password is same") {
+                    errmsg.textContent = "Password is same";
+                    errmsg.style.display = "block";
 
-            } else if (result==="Something issue in password change"){
-                errmsg.textContent("Something issue in password change");
-            }
-        })
-        
+                } else if (result.message === "Something issue in password change") {
+                    errmsg.textContent = "Something issue in password change";
+                    errmsg.style.display = "block";
+                }
+            })
+
     }
 }
 
