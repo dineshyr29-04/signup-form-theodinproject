@@ -6,5 +6,13 @@
     "email": "dineshyr2904@gmail.com",
     "password": "$2b$10$qTavERvCCkNsy4rCkNpJaO9IkTX3.cN0PpSIorX1Zg0Dj0uTqefsm",
     "createdAt": "2026-02-28T05:00:31.388Z"
+  },
+  {
+    "id": 1772257198192,
+    "firstname": "Anand",
+    "lastname": "M",
+    "email": "business.anandmahadev@gmail.com",
+    "password": "$2b$10$jTNkuNyu0kDy3Zr1u1B1humb1werIqj/BWb1XzrpJH6vmZrKgYiEq",
+    "createdAt": "2026-02-28T05:39:58.192Z"
   }
 ]

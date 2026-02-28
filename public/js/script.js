@@ -53,7 +53,7 @@ function login() {
             .then(result => {
                 if (result.message === "LOGIN_SUCCESS") {
 
-                    window.location.href = "/html/dashboard.html";
+                    window.location.href = "public\html\dashboard.html";    
                 } else if (result.message="Invalid password"){
                     setTimeout(() => {
                         error[1].textContent = "Invalid password for the given email";
@@ -138,7 +138,7 @@ function samepassword() {
 
     } else {
         loginbtn2[0].textContent = "Resetting...";
-        fetch("http ://localhost:5000/setpassword", {
+        fetch("http://localhost:5000/setpassword", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password: newpass.value })
