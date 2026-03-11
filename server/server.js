@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 
 // Default route to serve login page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "login.html"));
+  res.sendFile(path.join(__dirname, "..", "/login.html"));
 });
 
 /* ---------------- DATABASE FUNCTIONS ---------------- */
@@ -58,7 +58,7 @@ async function saveUsers(users) {
 
 /* ---------------- ROUTES ---------------- */
 
-// Removed health check because static files are now served from /
+
 
 // REGISTER
 app.post("/users", async (req, res) => {
